@@ -1,5 +1,6 @@
 import smtplib
 import serial
+from datetime import datetime
 
 '''
 verizon: @vtext.com
@@ -18,9 +19,10 @@ def send_sms(number, message):
     server.sendmail(email, number, message)
 
 if __name__ == "__main__":
-    ser = serial.Serial("COM3", 9600, timeout=1)
+    ser = serial.Serial("COM3", 115200, timeout=1)
     while True:
         if "indicator" in ser.readline().decode("utf-8"):
-            print("send sms")
-    # send_sms("6125997855@vtext.com", "test123")
-    
+            time = datetime.now().strftime("%I:%M %p")
+            msg = "Critical safety event at " + time
+            print(msg)
+            send_sms("6125997855@vtext.com", msg)  
