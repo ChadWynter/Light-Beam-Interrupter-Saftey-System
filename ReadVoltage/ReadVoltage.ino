@@ -28,9 +28,10 @@ int get_array_max_difference(int array[], int array_size) {
 }
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
+
+bool sent = 0;
 
 void loop() {
   int value = analogRead(A0);
@@ -38,23 +39,27 @@ void loop() {
 
   shift_and_append(last_readings, value, 10);
 //  Serial.print("\n\n[");
-//  for(int i = 0; i < 10; i++) {
+  for(int i = 0; i < 10; i++) {
 //    Serial.print(last_readings[i]);
 //    Serial.print(" ");
-//  }
+  }
 //  Serial.print("]\n");
-//
-//  int diff = get_array_max_difference(last_readings, 10);
-//
-//  Serial.println(diff);
-  delay(100);
 
-  if (diff > 3) {
+  int diff = get_array_max_difference(last_readings, 10);
+
+//  Serial.println(diff);
+  delay(1000);
+
+  if (diff > 300) {
 //    Serial.println("led off");
     digitalWrite(2, 0);
+    sent = 0;
   }
   else {
-//    Serial.println("led on");
+    if (!sent) {
+      Serial.println("indicator"); 
+    }
+    sent = 1;
     digitalWrite(2, 1);
   }
 }
